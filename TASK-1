@@ -1,0 +1,34 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+ds = pd.read_csv('iris.csv')
+dt=ds.drop("Id",axis=1)
+print(dt)
+dt.info()
+dt.head()
+dt.describe()
+plt.figure(figsize=(12,8))
+sns.heatmap(dt.corr(),annot=True)
+plt.title("correltion btw columns")
+sns.pairplot(dt, hue="Species")
+data = dt.values
+#print(data)
+x = data[:,0:4]
+#print(x)
+y = data[:,4]
+#print(y)
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size = 75)
+from sklearn.svm import SVC
+s = SVC()
+s.fit(x_train,y_train)
+from sklearn.metrics import accuracy_score
+pred = s.predict(x_test)
+acc = accuracy_score(y_test,pred)*100
+print("Accuracy percentage of the model is : ",acc,"%")
+from sklearn.metrics import classification_report
+print(classification_report(y_test, pred))
+X_new = np.array([[3, 2, 1, 0.2], [  4.9, 2.2, 3.8, 1.1 ], [  5.3, 2.5, 4.6, 1.9 ]])
+pred = s.predict(X_new)
+print("Prediction of Species: ",pred)
